@@ -8,6 +8,20 @@ Number.prototype.toFixedDown = function(digits) {
     return m ? parseFloat(m[1]) : this.valueOf();
 };
 
+centers = {'sondrio': [ 9.878767, 46.169858 ],
+			'lodi': [ 9.5037159, 45.3097228 ] ,
+			'cremona':[ 10.022651, 45.133249 ], 
+			'milano':[ 9.185924, 45.465422 ],
+			'mantova': [ 10.791375, 45.156417 ], 
+			'bergamo':[ 9.67727, 45.698264 ],
+			'lecco':[ 9.39767, 45.85657 ] ,
+			'pavia':[ 9.158207, 45.184725 ] ,
+			'monza':[ 9.274449, 45.5845 ] ,
+			'brescia':[ 10.211802, 45.541553 ],
+			'como':[ 9.085176, 45.80806 ] ,
+			'varese': [ 8.825058, 45.820599 ] };
+
+
 var currentKmlObjects = { 
 // 'ecomuseo': null,
 //'tin': null,
@@ -29,7 +43,7 @@ function init() {
 	    container: 'map3d', // container id
 	    style: 'mapbox://styles/dnlcrl/ciy1cvzzp00c32sqkqt2uebg1', //stylesheet location
 	    center:  [9.689630, 45.705651], //[9.856441382762, 45.10320555826568], // starting position
-	    zoom: 15.99, //9 // starting zoom
+	    zoom: 13, //9 // starting zoom
 	    pitch: 60
 
     });
@@ -56,6 +70,44 @@ function init() {
 
    	
 
+	// When a click event occurs near a place, open a popup at the location of
+	// the feature, with description HTML from its properties.
+	app.map.on('click', function (e) {
+	    if(app.popup){
+	        app.popup._closeButton.click()
+	    }
+	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys( currentKmlObjects )});
+
+	    if (!features.length) {
+	        return;
+	    }
+
+	    feature = undefined;
+	    for (var i = features.length - 1; i >= 0; i--) {
+	    	if (features[i].properties.description !== undefined){
+	    		feature = features[i];
+	    		break;
+	    	}
+	    }
+
+	    // var feature = features[features.length - 1];
+
+	    // Populate the popup and set its coordinates
+	    // based on the feature found.
+	    app.popup = new mapboxgl.Popup()
+	        .setLngLat(e.lngLat)
+	        .setHTML(feature.properties.description)
+	        .addTo(map);
+	});
+
+	// Use the same approach as above to indicate that the symbols are clickable
+	// by changing the cursor style to 'pointer'.
+	app.map.on('mousemove', function (e) {
+	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys(currentKmlObjects) });
+	    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+
+	});
+
 
   // google.earth.createInstance('map3d', initCallback, failureCallback);
 }
@@ -65,73 +117,37 @@ function init() {
 
 
 function initCallback(pluginInstance) {
-//      ge = pluginInstance;
-//      ge.getWindow().setVisibility(true);
-
-// 	//CONTROLLI CON FADE AUTOMATICO
-// 	ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
-
-// 	//DISABILITO CONFINI E NOMI STRADE
-	
-// 	ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, false);
-// 	ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, false);
-	
-// 	//VOLA A BERGAMO
-// 	var la = ge.createLookAt('');
-// 	la.set(45.10320555826568, 9.856441382762,
-// 	9, // altitude
-// 	ge.ALTITUDE_RELATIVE_TO_GROUND,
-// 	0, // heading
-// 	0, // straight-down tilt
-// 	210000 // range (inverse of zoom)
-// 	);
-// ge.getView().setAbstractView(la);
-
-
-	
-
-
-	// SE CHECKBOX = CHECKED DI DEFAULT, ABILITA SUBITO IL LAYER CORRISPONDENTE
-//	if (document.getElementById('kml-ecomuseo-check').checked)
-//	loadKml('ecomuseo');
-
-//if (document.getElementById('kml-tin-check').checked)
-//	loadKml('tin');
 
 
 
-//if (document.getElementById('kml-sic_riserve_plis-check').checked)
-//	loadKml('sic_riserve_plis');
 
-
-
-if (document.getElementById('kml-confini_comunali-check').checked)
+	if (document.getElementById('kml-confini_comunali-check').checked)
 	loadKml('confini_comunali');
 
-if (document.getElementById('kml-designatori__-check').checked)
+	if (document.getElementById('kml-designatori__-check').checked)
 	loadKml('designatori__');
 
 
 
 
-  
-	
+
+
 	function eventHandler(event) {
-    var text = event.getLatitude()+","+event.getLongitude();
+		var text = event.getLatitude()+","+event.getLongitude();
 
-    // Prevent default balloon from popping up for marker placemarks
-    event.preventDefault();
+		// Prevent default balloon from popping up for marker placemarks
+		event.preventDefault();
 
-    // wrap alerts in API callbacks and event handlers
-    // in a setTimeout to prevent deadlock in some browsers
-    setTimeout(function() {
-      // alert(text);
-      var divcoordinate = document.getElementById("coordinate");
-      divcoordinate.innerHTML = text;
-    }, 0);
-  }
- // listen to the click event on the globe and window
-  google.earth.addEventListener(ge.getWindow(), 'mousemove', eventHandler);
+		// wrap alerts in API callbacks and event handlers
+		// in a setTimeout to prevent deadlock in some browsers
+		setTimeout(function() {
+			// alert(text);
+			var divcoordinate = document.getElementById("coordinate");
+			divcoordinate.innerHTML = text;
+		}, 0);
+	}
+	// listen to the click event on the globe and window
+	google.earth.addEventListener(ge.getWindow(), 'mousemove', eventHandler);
 
 }
 
@@ -139,17 +155,7 @@ function failureCallback(errorCode) {
 }
 
 function toggleGeojson(file) {
-	// better toggle visibility instead of remove and add layers
-	//https://www.mapbox.com/mapbox-gl-js/example/toggle-layers/
 
-
-	// remove the old KML object if it exists
-	// if (currentKmlObjects[file]) {
-	// 	ge.getFeatures().removeChild(currentKmlObjects[file]);
-	// 	currentKmlObject = null;
-	// }
-
-	// if the checkbox is checked, fetch the KML and show it on Earth
 	var kmlCheckbox = document.getElementById('kml-' + file + '-check');
 
 	if (kmlCheckbox.checked && !currentKmlObjects[file])
@@ -171,6 +177,9 @@ function toggleLayer(file){
     } else {
         this.className = 'active';
         map.setLayoutProperty(file, 'visibility', 'visible');
+        map.flyTo({
+        	center: centers[file.split('_')[0]]
+    	});
     }
 
 }
@@ -185,14 +194,17 @@ function linkCheck(url)
 
 function loadGeojson(file) {
 	map = app.map;
-	var path = 'geojson/' + file + '.geojson'; 
+	var path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/' + file + '.geojson'; 
 	if (!linkCheck(path)){
 		alert('Work In Progress!\nGoogle ha terminato il supporto alle API di Google Earth, stiamo lavorando per rendere la piattaforma nuovamente funzionante quanto prima.')
 		document.getElementById('kml-' + file + '-check').checked = '';
 		return
 	}
 
-	//alert(path); DEBUG PER VERIFICARE LINK
+    map.flyTo({
+        center: centers[file.split('_')[0]]
+    });
+
 	map.addSource(file, {
     'type': 'geojson',
     'data': path
@@ -229,82 +241,7 @@ function loadGeojson(file) {
 
 	currentKmlObjects[file] = true;
 
-	// When a click event occurs near a place, open a popup at the location of
-	// the feature, with description HTML from its properties.
-	app.map.on('click', function (e) {
-	    if(app.popup){
-	        app.popup._closeButton.click()
-	    }
-	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys( currentKmlObjects )});
-		console.log(currentKmlObjects);
-
-	    if (!features.length) {
-	        return;
-	    }
-
-	    var feature = features[features.length - 1];
-
-	    // Populate the popup and set its coordinates
-	    // based on the feature found.
-	    app.popup = new mapboxgl.Popup()
-	        .setLngLat(e.lngLat)
-	        .setHTML(feature.properties.description)
-	        .addTo(map);
-	});
-
-	// Use the same approach as above to indicate that the symbols are clickable
-	// by changing the cursor style to 'pointer'.
-	app.map.on('mousemove', function (e) {
-	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys(currentKmlObjects) });
-	    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
-
-	});
-
-
-
-	// if (kmlObject) {
-	// // show it on Earth
-	// currentKmlObjects[file] = kmlObject;
-	// ge.getFeatures().appendChild(kmlObject);
-	// } else {
-	// // bad KML
-	// currentKmlObjects[file] = null;
-	// // wrap alerts in API callbacks and event handlers
-	// // in a setTimeout to prevent deadlock in some browsers
-	// setTimeout(function() {
-	// 	alert('Bad or null KML.');
-	// }, 0);
-
-	// uncheck the box
-	// document.getElementById('kml-' + file + '-check').checked = '';
-// }
 }
-
-// 	function loadKml(file) {
-// 		var kmlUrl = '' + file + '.kml'; 
-// 		//alert(kmlUrl); DEBUG PER VERIFICARE LINK
-// 		// fetch the KML
-// 		google.earth.fetchKml(ge, kmlUrl, function(kmlObject) {
-// 		// NOTE: we still have access to the 'file' variable (via JS closures)
-
-// 		if (kmlObject) {
-// 		// show it on Earth
-// 		currentKmlObjects[file] = kmlObject;
-// 		ge.getFeatures().appendChild(kmlObject);
-// 		} else {
-// 		// bad KML
-// 		currentKmlObjects[file] = null;
-// 		// wrap alerts in API callbacks and event handlers
-// 		// in a setTimeout to prevent deadlock in some browsers
-// 		setTimeout(function() {
-// 			alert('Bad or null KML.');
-// 		}, 0);
-
-// 		// uncheck the box
-// 		document.getElementById('kml-' + file + '-check').checked = '';
-//     }
-//   });
-// }
 
 
  function toggleStrade() {

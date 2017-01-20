@@ -132,6 +132,11 @@ function init() {
 	    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
 	});
+	// the 'building' layer in the mapbox-streets vector source contains building-height
+	// data from OpenStreetMap.
+	// map.on('load', function() {
+	//     addBuildings();
+	// });
 
 
   // google.earth.createInstance('map3d', initCallback, failureCallback);
@@ -139,7 +144,28 @@ function init() {
 
 
 
-
+function addBuildings(){
+	app.map.addLayer({
+	        'id': '3d-buildings',
+	        'source': 'composite',
+	        'source-layer': 'building',
+	        'filter': ['==', 'extrude', 'true'],
+	        'type': 'fill-extrusion',
+	        'minzoom': 15,
+	        'paint': {
+	            'fill-extrusion-color': '#aaa',
+	            'fill-extrusion-height': {
+	                'type': 'identity',
+	                'property': 'height'
+	            },
+	            'fill-extrusion-base': {
+	                'type': 'identity',
+	                'property': 'min_height'
+	            },
+	            'fill-extrusion-opacity': .6
+	        }
+	    }, 'background');
+}
 
 function initCallback(pluginInstance) {
 
@@ -211,7 +237,7 @@ function toggleLayer(file){
 function linkCheck(url)
 {
     var http = new XMLHttpRequest();
-    http.open('HEAD', url, false);
+    http.open('HEAD', url);
     http.send();
     return http.status!=404;
 }
@@ -257,7 +283,6 @@ function loadGeojson(file) {
 	});
 
 	
-	console.log(styleToLabelLayer[app.currentStyle]);
 	map.addLayer({
         'id': file,
         'type': 'fill-extrusion',
@@ -306,6 +331,7 @@ function addCheckedLayers(){
 	if (l !== undefined && app.map != undefined) {
 			clearInterval(app.styleTimer);
 			toggleConfini();
+			// addBuildings();
 			for (var file in app.layersToRecover){
 				toggleGeojson(file);
 			}

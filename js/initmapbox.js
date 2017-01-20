@@ -2,6 +2,26 @@ var ge;
 
 var app = {};
 
+//this timer is used when toggling layers after a map style change
+app.styleTimer = null;
+
+styles = {
+	'default': "mapbox://styles/dnlcrl/ciy1cvzzp00c32sqkqt2uebg1",
+	'satellite': "mapbox://styles/dnlcrl/ciy5oqecp00472sqitnohq0rw",
+	'light': "mapbox://styles/dnlcrl/ciy5r55xv004r2slsthz09mh7",
+	'dark': "mapbox://styles/dnlcrl/ciy5rbyyh004i2sofxd7ka19s"
+}
+
+styleToLabelLayer = {
+	'default': 'waterway-label',
+	'satellite': undefined,
+	'light': 'water',
+	'dark': 'waterway-label'
+}
+
+app.currentStyle = 'default'
+app.stylechanged = undefined
+
 Number.prototype.toFixedDown = function(digits) {
     var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
         m = this.toString().match(re);
@@ -22,7 +42,7 @@ centers = {'sondrio': [ 9.878767, 46.169858 ],
 			'varese': [ 8.825058, 45.820599 ] };
 
 
-var currentKmlObjects = { 
+app.currentKmlObjects = { 
 // 'ecomuseo': null,
 //'tin': null,
 //'sic_riserve_plis': null,
@@ -81,7 +101,7 @@ function init() {
 	    if(app.popup){
 	        app.popup._closeButton.click()
 	    }
-	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys( currentKmlObjects )});
+	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys( app.currentKmlObjects )});
 
 	    if (!features.length) {
 	        return;
@@ -108,7 +128,7 @@ function init() {
 	// Use the same approach as above to indicate that the symbols are clickable
 	// by changing the cursor style to 'pointer'.
 	app.map.on('mousemove', function (e) {
-	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys(currentKmlObjects) });
+	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys(app.currentKmlObjects) });
 	    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
 	});
@@ -163,7 +183,7 @@ function toggleGeojson(file) {
 
 	var kmlCheckbox = document.getElementById('kml-' + file + '-check');
 
-	if (kmlCheckbox.checked && !currentKmlObjects[file])
+	if (kmlCheckbox.checked && !app.currentKmlObjects[file])
 		loadGeojson(file);
 	else{
 		toggleLayer(file);
@@ -174,7 +194,7 @@ function toggleLayer(file){
 	map = app.map;
     var clickedLayer = file
 
-    var visibility = map.getLayoutProperty(file, 'visibility');
+    var visibility = map.getLayoutProperty(file, "visibility");
 
     if (visibility !== 'none') {
         map.setLayoutProperty(file, 'visibility', 'none');
@@ -187,6 +207,7 @@ function toggleLayer(file){
     }
 
 }
+
 function linkCheck(url)
 {
     var http = new XMLHttpRequest();
@@ -196,10 +217,13 @@ function linkCheck(url)
 }
 
 function flyTo(coordinates){
+	if(app.stylechanged){
+		return
+	}
     if(app.popup){
         app.popup._closeButton.click()
     }
-	map.flyTo({
+	app.map.flyTo({
         center: coordinates,
         zoom: 13, //9 // starting zoom
 	    pitch: 60,
@@ -209,15 +233,22 @@ function flyTo(coordinates){
 
 
 function loadGeojson(file) {
+
+	var path = '';
+
+	{
+		path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/' + file + '.geojson'; 
+		flyTo(centers[file.split('_')[0]]);
+	}
 	map = app.map;
-	var path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/' + file + '.geojson'; 
+	// var path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/' + file + '.geojson'; 
 	if (!linkCheck(path)){
 		alert('Work In Progress!\nGoogle ha terminato il supporto alle API di Google Earth, stiamo lavorando per rendere la piattaforma nuovamente funzionante quanto prima.')
 		document.getElementById('kml-' + file + '-check').checked = '';
 		return
 	}
 
-	flyTo(centers[file.split('_')[0]]);
+	
     
 
 	map.addSource(file, {
@@ -226,7 +257,7 @@ function loadGeojson(file) {
 	});
 
 	
-
+	console.log(styleToLabelLayer[app.currentStyle]);
 	map.addLayer({
         'id': file,
         'type': 'fill-extrusion',
@@ -252,24 +283,67 @@ function loadGeojson(file) {
             // Make extrusions slightly opaque for see through indoor walls.
 	            'fill-extrusion-opacity': 0.8
 	    }
-	});
+	}, styleToLabelLayer[app.currentStyle]);
 
-	currentKmlObjects[file] = true;
+	app.currentKmlObjects[file] = true;
 
 }
 
 
- function toggleStrade() {
- 		var kmlCheckbox = document.getElementById('kml-strade-check');
-		if (kmlCheckbox.checked)
-		   	ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
-    else
-    	 ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, false);  	
- }
-  function toggleConfini() {
-   		var kmlCheckbox = document.getElementById('kml-confini-check');
-		if (kmlCheckbox.checked)
-		   	ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
-    else
-    	 ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, false);  
- }// JavaScript Document
+function toggleStrade() {
+	sat = "mapbox://styles/dnlcrl/ciy5oqecp00472sqitnohq0rw"
+
+// else
+
+}
+
+function startStyleTimer(){
+	app.styleTimer = setInterval(addCheckedLayers, 500);
+}
+
+function addCheckedLayers(){
+	var l = app.map.style.getLayer("confini-comunali");
+	if (l !== undefined && app.map != undefined) {
+			clearInterval(app.styleTimer);
+			toggleConfini();
+			for (var file in app.layersToRecover){
+				toggleGeojson(file);
+			}
+			app.stylechanged = undefined
+	}
+}
+
+function toggleConfini() {
+
+	map = app.map
+	var l = map.style.getLayer("confini-comunali");
+
+	if (!document.getElementById('confini_comunali-check').checked) {
+		l.layout.visibility = "none"
+	}
+	else{
+	l.layout.visibility = "visible"
+	}
+	map._render();
+}// JavaScript Document
+
+
+var layerList = document.getElementById('menustyle');
+var inputs = layerList.getElementsByTagName('input');
+
+function switchLayer(layer) {
+    var layerId = layer.target.id;
+    app.map.setStyle(styles[layerId]);
+    // 'mapbox://styles/mapbox/' + layerId + '-v9');
+    
+    app.styleTimer = setInterval(addCheckedLayers, 500);
+    app.layersToRecover = app.currentKmlObjects 
+    app.currentKmlObjects = {}
+    app.currentStyle = layerId
+    app.stylechanged = true
+}
+
+for (var i = 0; i < inputs.length; i++) {
+    inputs[i].onclick = switchLayer;
+}
+

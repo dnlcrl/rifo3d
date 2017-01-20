@@ -71,181 +71,196 @@
                 </div>  
             <!-- </div> -->
         </header>
-        <div class="row">
-            <div class="col-md-2 left">
-            <input type="button" value="Reset Map!" onclick="window.location.href=window.location.href">
-            <br><br>
-            </form> 
-            <div id="layersonoff">
-            <div class="uk-grid legct" >
-                <div class="uk-width-1-4 Stile3">
-                    <span class="legenda-title"> <STRONG>GRADO DI OPERATIVITA'</STRONG></span>
+
+        <div class="col-md-2 left">
+        <input type="button" value="Reset Map!" onclick="window.location.href=window.location.href">
+        <br><br>
+        </form> 
+        <div id="layersonoff">
+        <div class="uk-grid legct" >
+            <div class="uk-width-1-4 Stile3">
+                <span class="legenda-title"> <STRONG>GRADO DI OPERATIVITA'</STRONG></span>
+                <div>
+                    <img src="images/legenda/aree_obsolete.png" style="width: 100px"  /> <img src="images/legenda/aree_dismesse.png" style="width: 100px"  />
+                </div>
+                <STRONG>FONDO MAPPA</STRONG>
+                <div class="uk-width-1-4">
+                    <span class="legenda-title Stile3"> </span>
                     <div class="earthtoggles">
-                        <div>
-                            <img src="images/legenda/aree_obsolete.png" style="width: 100px"  /> <img src="images/legenda/aree_dismesse.png" style="width: 100px"  />
+                        <div id="menustyle" class="Stile3">
+                            <input type="radio" name="rtoggle" id="default" value="default" checked="checked">
+                            <label for="default" >Ibrido</label>
+                            <input type="radio" name="rtoggle" id="satellite" value="satellite">
+                            <label for="satellite" >Satellite</label>
+                            <input type="radio" name="rtoggle" id="light" value="light">
+                            <label for="light" >Light</label>
+                            <input type="radio" name="rtoggle" id="dark" value="dark">
+                            <label for="dark" >Dark</label>
                         </div>
-                        <STRONG>BERGAMO</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-bergamo_obsoleto-check" onclick="toggleGeojson('bergamo_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/bergamo_obsoleto.html', 'Bergamo Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                        <div class="Stile3">
+                            <input type="checkbox" id="confini_comunali-check" onclick="toggleConfini()" checked>
+                            <span class="legenda">Confini Comunali</span>
                         </div>
-                        <div>
-                            <input type="checkbox" id="kml-bergamo_dismesso-check" onclick="toggleGeojson('bergamo_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/bergamo_dismesso.html', 'Bergamo Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>BRESCIA</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-brescia_obsoleto-check" onclick="toggleGeojson('brescia_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/brescia_obsoleto.html', 'Brescia Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-brescia_dismesso-check" onclick="toggleGeojson('brescia_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/brescia_dismesso.html', 'Brescia Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>COMO</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-como_obsoleto-check" onclick="toggleGeojson('como_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/como_obsoleto.html', 'Como Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-como_dismesso-check" onclick="toggleGeojson('como_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/como_dismesso.html', 'Como Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>CREMONA</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-cremona_obsoleto-check" onclick="toggleGeojson('cremona_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/cremona_obsoleto.html', 'Cremona Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-cremona_dismesso-check" onclick="toggleGeojson('cremona_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/cremona_dismesso.html', 'Cremona Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>LECCO</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-lecco_obsoleto-check" onclick="toggleGeojson('lecco_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/lecco_obsoleto.html', 'Lecco Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-lecco_dismesso-check" onclick="toggleGeojson('lecco_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/lecco_dismesso.html', 'Lecco Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>LODI</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-lodi_obsoleto-check" onclick="toggleGeojson('lodi_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/lodi_obsoleto.html', 'Lodi Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-lodi_dismesso-check" onclick="toggleGeojson('lodi_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/lodi_dismesso.html', 'Lodi Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>MANTOVA</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-mantova_obsoleto-check" onclick="toggleGeojson('mantova_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/mantova_obsoleto.html', 'Mantova Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-mantova_dismesso-check" onclick="toggleGeojson('mantova_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/mantova_dismesso.html', 'Mantova Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>MILANO</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-milano_obsoleto-check" onclick="toggleGeojson('milano_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/milano_obsoleto.html', 'Milano Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-milano_dismesso-check" onclick="toggleGeojson('milano_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/milano_dismesso.html', 'Milano Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>MONZA</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-monza_obsoleto-check" onclick="toggleGeojson('monza_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/monza_obsoleto.html', 'Monza Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-monza_dismesso-check" onclick="toggleGeojson('monza_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/monza_dismesso.html', 'Monza Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>PAVIA</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-pavia_obsoleto-check" onclick="toggleGeojson('pavia_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/pavia_obsoleto.html', 'Pavia Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-pavia_dismesso-check" onclick="toggleGeojson('pavia_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/pavia_dismesso.html', 'Pavia Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>SONDRIO</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-sondrio_obsoleto-check" onclick="toggleGeojson('sondrio_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/sondrio_obsoleto.html', 'Sondrio Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-sondrio_dismesso-check" onclick="toggleGeojson('sondrio_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/sondrio_dismesso.html', 'Sondrio Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <STRONG>VARESE</STRONG>
-                        <div>
-                            <input type="checkbox" id="kml-varese_obsoleto-check" onclick="toggleGeojson('varese_obsoleto')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/varese_obsoleto.html', 'Varese Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="kml-varese_dismesso-check" onclick="toggleGeojson('varese_dismesso')">
-                            <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/varese_dismesso.html', 'Varese Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
-                        </div>
-                        <br>
-                        <div class="uk-width-1-4">
-                            <span class="legenda-title Stile3"> </span>
-                            <div class="earthtoggles">
-                                <div class="Stile3">
-                                    <input type="checkbox" id="kml-confini_comunali-check" onclick="toggleGeojson('confini_comunali')" checked>
-                                    <span class="legenda">Confini Comunali</span>
-                                </div>
-                                <div class="input_check">
-                                    <input type="checkbox" id="kml-designatori__-check" onclick="toggleGeojson('designatori__')" checked>
-                                </div>
-                                <div class="Stile3">
-                                    <input type="checkbox" id="kml-strade-check" onClick="toggleStrade()">
-                                    <span class="legenda">Strade</span>
-                                </div>
-                            </div>
-                            <div class="Stile3">
-                                <input type="checkbox" id="kml-confini-check" onClick="toggleConfini()">
-                                <span class="legenda">Toponimi</span>
-                            </div>
-                        </div>
+ <!--                        <div class="input_check">
+                            <input type="checkbox" id="kml-designatori__-check" onclick="toggleGeojson('designatori__')" >
+                        </div> -->
+                        
+
+
+                            <!-- <input type="checkbox" id="kml-strade-check" onClick="toggleStrade()">
+                            <span class="legenda">Strade</span> -->
+                        <!-- </div> -->
                     </div>
+<!--                         <div class="Stile3">
+                        <input type="checkbox" id="kml-confini-check" onClick="toggleConfini()">
+                        <span class="legenda">Toponimi</span>
+                    </div> -->
                 </div>
-                <br />
-                <div class="Stile3">
-                    Latitudine, Longitudine
-                    <div id="coordinate"></div>
+                <br>
+                
+                <div class="earthtoggles">
+
+                    <STRONG>BERGAMO</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-bergamo_obsoleto-check" onclick="toggleGeojson('bergamo_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/bergamo_obsoleto.html', 'Bergamo Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-bergamo_dismesso-check" onclick="toggleGeojson('bergamo_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/bergamo_dismesso.html', 'Bergamo Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>BRESCIA</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-brescia_obsoleto-check" onclick="toggleGeojson('brescia_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/brescia_obsoleto.html', 'Brescia Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-brescia_dismesso-check" onclick="toggleGeojson('brescia_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/brescia_dismesso.html', 'Brescia Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>COMO</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-como_obsoleto-check" onclick="toggleGeojson('como_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/como_obsoleto.html', 'Como Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-como_dismesso-check" onclick="toggleGeojson('como_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/como_dismesso.html', 'Como Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>CREMONA</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-cremona_obsoleto-check" onclick="toggleGeojson('cremona_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/cremona_obsoleto.html', 'Cremona Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-cremona_dismesso-check" onclick="toggleGeojson('cremona_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/cremona_dismesso.html', 'Cremona Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>LECCO</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-lecco_obsoleto-check" onclick="toggleGeojson('lecco_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/lecco_obsoleto.html', 'Lecco Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-lecco_dismesso-check" onclick="toggleGeojson('lecco_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/lecco_dismesso.html', 'Lecco Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>LODI</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-lodi_obsoleto-check" onclick="toggleGeojson('lodi_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/lodi_obsoleto.html', 'Lodi Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-lodi_dismesso-check" onclick="toggleGeojson('lodi_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/lodi_dismesso.html', 'Lodi Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>MANTOVA</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-mantova_obsoleto-check" onclick="toggleGeojson('mantova_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/mantova_obsoleto.html', 'Mantova Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-mantova_dismesso-check" onclick="toggleGeojson('mantova_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/mantova_dismesso.html', 'Mantova Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>MILANO</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-milano_obsoleto-check" onclick="toggleGeojson('milano_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/milano_obsoleto.html', 'Milano Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-milano_dismesso-check" onclick="toggleGeojson('milano_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/milano_dismesso.html', 'Milano Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>MONZA</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-monza_obsoleto-check" onclick="toggleGeojson('monza_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/monza_obsoleto.html', 'Monza Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-monza_dismesso-check" onclick="toggleGeojson('monza_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/monza_dismesso.html', 'Monza Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>PAVIA</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-pavia_obsoleto-check" onclick="toggleGeojson('pavia_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/pavia_obsoleto.html', 'Pavia Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-pavia_dismesso-check" onclick="toggleGeojson('pavia_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/pavia_dismesso.html', 'Pavia Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>SONDRIO</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-sondrio_obsoleto-check" onclick="toggleGeojson('sondrio_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/sondrio_obsoleto.html', 'Sondrio Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-sondrio_dismesso-check" onclick="toggleGeojson('sondrio_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/sondrio_dismesso.html', 'Sondrio Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <STRONG>VARESE</STRONG>
+                    <div>
+                        <input type="checkbox" id="kml-varese_obsoleto-check" onclick="toggleGeojson('varese_obsoleto')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_obsoleto/varese_obsoleto.html', 'Varese Obsoleto', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Obsoleto</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="kml-varese_dismesso-check" onclick="toggleGeojson('varese_dismesso')">
+                        <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/varese_dismesso.html', 'Varese Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <br>
+
                 </div>
-            <a HREF=http://www.unibg.it/diathesis target="_blank"><img src="images/diathesis.gif" width="126" height="48" ></a>
-            <br>
-            <a href="mailto:sara.belotti@unibg.it">Help</a> 
-            </br>
             </div>
-    		</div>
-    		</div>
-    		<div class="col-md-10 right">
-
-    			<script src="js/initmapbox.js" type="text/javascript"></script>
-    			       
-    			<script type="text/javascript">
-    			  window.onload = init;  
-    			    </script>
-    			<script type="text/javascript">
-    			  jQuery(document).ready(function($){
-    			       $target = $("#map3d").parents("article, main");
-    			       $target.css("padding","0px");
-    			});
-    			</script>
-
-    			<div id="map3d" style="width: 100%; height: 100%;"></div>
-
-    		</div>
+            <br />
+            <div class="Stile3">
+                Latitudine, Longitudine
+                <div id="coordinate"></div>
+            </div>
+        <a HREF=http://www.unibg.it/diathesis target="_blank"><img src="images/diathesis.gif" width="126" height="48" ></a>
+        <br>
+        <a href="mailto:sara.belotti@unibg.it">Help</a> 
+        </br>
         </div>
+		</div>
+		</div>
+		<div class="col-md-10 right">
 
+			<script src="js/initmapbox.js" type="text/javascript"></script>
+			       
+			<script type="text/javascript">
+			  window.onload = init;  
+			    </script>
+			<script type="text/javascript">
+			  jQuery(document).ready(function($){
+			       $target = $("#map3d").parents("article, main");
+			       $target.css("padding","0px");
+			});
+			</script>
+
+			<div id="map3d" style="width: 100%; height: 100%;"></div>
+
+		</div>
         
         <!-- <div class="Stile3">
             <br>

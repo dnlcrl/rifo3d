@@ -35,6 +35,10 @@ var currentKmlObjects = {
 //var ge_abitati = true;
 
 // google.load("earth", "1");
+var bounds = [
+    [8.55666,44.738], // Southwest coordinates
+    [11.3539,46.5386]  // Northeast coordinates
+];
 
 function init() {
 	mapboxgl.accessToken = 'pk.eyJ1IjoiZG5sY3JsIiwiYSI6ImNpc3ZpeXpuYzAwMGcydG1uZnYwcjF6a20ifQ.haWicjVXwzcXqRMj3kdYMg';
@@ -44,7 +48,8 @@ function init() {
 	    style: 'mapbox://styles/dnlcrl/ciy1cvzzp00c32sqkqt2uebg1', //stylesheet location
 	    center:  [9.689630, 45.705651], //[9.856441382762, 45.10320555826568], // starting position
 	    zoom: 13, //9 // starting zoom
-	    pitch: 60
+	    pitch: 60,
+    	maxBounds: bounds // Sets bounds as max
 
     });
     setTimeout(function() {
@@ -177,9 +182,8 @@ function toggleLayer(file){
     } else {
         this.className = 'active';
         map.setLayoutProperty(file, 'visibility', 'visible');
-        map.flyTo({
-        	center: centers[file.split('_')[0]]
-    	});
+
+	    flyTo(centers[file.split('_')[0]]);
     }
 
 }
@@ -189,6 +193,18 @@ function linkCheck(url)
     http.open('HEAD', url, false);
     http.send();
     return http.status!=404;
+}
+
+function flyTo(coordinates){
+    if(app.popup){
+        app.popup._closeButton.click()
+    }
+	map.flyTo({
+        center: coordinates,
+        zoom: 13, //9 // starting zoom
+	    pitch: 60,
+	    bearing: 0
+    });
 }
 
 
@@ -201,9 +217,8 @@ function loadGeojson(file) {
 		return
 	}
 
-    map.flyTo({
-        center: centers[file.split('_')[0]]
-    });
+	flyTo(centers[file.split('_')[0]]);
+    
 
 	map.addSource(file, {
     'type': 'geojson',

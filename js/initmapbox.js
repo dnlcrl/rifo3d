@@ -42,7 +42,7 @@ centers = {'sondrio': [ 9.878767, 46.169858 ],
 			'varese': [ 8.825058, 45.820599 ] };
 
 
-app.currentKmlObjects = { 
+app.currentGeojsonObjects = { 
 // 'ecomuseo': null,
 //'tin': null,
 //'sic_riserve_plis': null,
@@ -101,7 +101,7 @@ function init() {
 	    if(app.popup){
 	        app.popup._closeButton.click()
 	    }
-	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys( app.currentKmlObjects )});
+	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys( app.currentGeojsonObjects )});
 
 	    if (!features.length) {
 	        return;
@@ -128,7 +128,7 @@ function init() {
 	// Use the same approach as above to indicate that the symbols are clickable
 	// by changing the cursor style to 'pointer'.
 	app.map.on('mousemove', function (e) {
-	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys(app.currentKmlObjects) });
+	    var features = map.queryRenderedFeatures(e.point, { layers: Object.keys(app.currentGeojsonObjects) });
 	    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
 	});
@@ -172,11 +172,11 @@ function initCallback(pluginInstance) {
 
 
 
-	if (document.getElementById('kml-confini_comunali-check').checked)
-	loadKml('confini_comunali');
+	if (document.getElementById('Geojson-confini_comunali-check').checked)
+	loadGeojson('confini_comunali');
 
-	if (document.getElementById('kml-designatori__-check').checked)
-	loadKml('designatori__');
+	if (document.getElementById('Geojson-designatori__-check').checked)
+	loadGeojson('designatori__');
 
 
 
@@ -207,9 +207,9 @@ function failureCallback(errorCode) {
 
 function toggleGeojson(file) {
 
-	var kmlCheckbox = document.getElementById('kml-' + file + '-check');
+	var GeojsonCheckbox = document.getElementById('Geojson-' + file + '-check');
 
-	if (kmlCheckbox.checked && !app.currentKmlObjects[file])
+	if (GeojsonCheckbox.checked && !app.currentGeojsonObjects[file])
 		loadGeojson(file);
 	else{
 		toggleLayer(file);
@@ -270,7 +270,7 @@ function loadGeojson(file) {
 	// var path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/' + file + '.geojson'; 
 	if (!linkCheck(path)){
 		alert('Work In Progress!\nGoogle ha terminato il supporto alle API di Google Earth, stiamo lavorando per rendere la piattaforma nuovamente funzionante quanto prima.')
-		document.getElementById('kml-' + file + '-check').checked = '';
+		document.getElementById('Geojson-' + file + '-check').checked = '';
 		return
 	}
 
@@ -306,11 +306,11 @@ function loadGeojson(file) {
                 'type': 'identity'
             },
             // Make extrusions slightly opaque for see through indoor walls.
-	            'fill-extrusion-opacity': 0.8
+	            'fill-extrusion-opacity': 1
 	    }
 	}, styleToLabelLayer[app.currentStyle]);
 
-	app.currentKmlObjects[file] = true;
+	app.currentGeojsonObjects[file] = true;
 
 }
 
@@ -363,8 +363,8 @@ function switchLayer(layer) {
     // 'mapbox://styles/mapbox/' + layerId + '-v9');
     
     app.styleTimer = setInterval(addCheckedLayers, 500);
-    app.layersToRecover = app.currentKmlObjects 
-    app.currentKmlObjects = {}
+    app.layersToRecover = app.currentGeojsonObjects 
+    app.currentGeojsonObjects = {}
     app.currentStyle = layerId
     app.stylechanged = true
 }

@@ -6,20 +6,23 @@ var app = {};
 app.styleTimer = null;
 
 styles = {
-	'default': "mapbox://styles/dnlcrl/ciy1cvzzp00c32sqkqt2uebg1",
 	'satellite': "mapbox://styles/dnlcrl/ciy5oqecp00472sqitnohq0rw",
+	'hybrid': "mapbox://styles/dnlcrl/ciy1cvzzp00c32sqkqt2uebg1",
+	'outdoors': "mapbox://styles/dnlcrl/ciya6ykcx006x2sqea5852xc2",
 	'light': "mapbox://styles/dnlcrl/ciy5r55xv004r2slsthz09mh7",
-	'dark': "mapbox://styles/dnlcrl/ciy5rbyyh004i2sofxd7ka19s"
+	'dark': "mapbox://styles/dnlcrl/ciy5rbyyh004i2sofxd7ka19s",
 }
 
 styleToLabelLayer = {
-	'default': 'waterway-label',
+	'hybrid': 'waterway-label',
 	'satellite': undefined,
 	'light': 'water',
-	'dark': 'waterway-label'
+	'dark': 'waterway-label',
+	'outdoors': 'poi-outdoor-features',
+
 }
 
-app.currentStyle = 'default'
+app.currentStyle = 'outdoors'
 app.stylechanged = undefined
 
 Number.prototype.toFixedDown = function(digits) {
@@ -65,7 +68,7 @@ function init() {
 	var map = new mapboxgl.Map({
 		// attributionControl: false,
 	    container: 'map3d', // container id
-	    style: 'mapbox://styles/dnlcrl/ciy1cvzzp00c32sqkqt2uebg1', //stylesheet location
+	    style: styles['outdoors'], //stylesheet location
 	    center:  [9.689630, 45.705651], //[9.856441382762, 45.10320555826568], // starting position
 	    zoom: 13, //9 // starting zoom
 	    pitch: 60,
@@ -132,88 +135,143 @@ function init() {
 	    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
 	});
-	// the 'building' layer in the mapbox-streets vector source contains building-height
-	// data from OpenStreetMap.
+
 	// map.on('load', function() {
-	//     addBuildings();
+	// 	loadEdifici();
 	// });
-
-
-  // google.earth.createInstance('map3d', initCallback, failureCallback);
+	
 }
 
+function loadEdifici(){
+	map = app.map;
+	for (var fnum = 0; fnum < 6; fnum++) {
+	    map.addSource('buildings'+ fnum.toString(), {
+		    'type': 'geojson',
+		    'data': 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/bergamo_altri/buildings' + fnum.toString() + '.geojson'
+			});
 
-
-function addBuildings(){
-	app.map.addLayer({
-	        'id': '3d-buildings',
-	        'source': 'composite',
-	        'source-layer': 'building',
-	        'filter': ['==', 'extrude', 'true'],
+			
+		map.addLayer({
+	        'id': 'buildings' + fnum.toString(),
 	        'type': 'fill-extrusion',
-	        'minzoom': 15,
+	        'source': 'buildings'+ fnum.toString(),
 	        'paint': {
-	            'fill-extrusion-color': '#aaa',
+	            // See the Mapbox Style Spec for details on property functions
+	            // https://www.mapbox.com/mapbox-gl-style-spec/#types-function
+	            'fill-extrusion-color': {
+	                // Get the fill-color from the source 'color' property.
+	                'property': 'color',
+	                'type': 'identity'
+	            },
 	            'fill-extrusion-height': {
-	                'type': 'identity',
-	                'property': 'height'
+	                // Get fill-extrude-height from the source 'height' property.
+	                'property': 'height',
+	                'type': 'identity'
 	            },
 	            'fill-extrusion-base': {
-	                'type': 'identity',
-	                'property': 'min_height'
+	                // Get fill-extrude-base from the source 'base_height' property.
+	                'property': 'base_height',
+	                'type': 'identity'
 	            },
-	            'fill-extrusion-opacity': .6
-	        }
-	    }, 'background');
-}
-
-function initCallback(pluginInstance) {
-
-
-
-
-	if (document.getElementById('Geojson-confini_comunali-check').checked)
-	loadGeojson('confini_comunali');
-
-	if (document.getElementById('Geojson-designatori__-check').checked)
-	loadGeojson('designatori__');
-
-
-
-
-
-
-	function eventHandler(event) {
-		var text = event.getLatitude()+","+event.getLongitude();
-
-		// Prevent default balloon from popping up for marker placemarks
-		event.preventDefault();
-
-		// wrap alerts in API callbacks and event handlers
-		// in a setTimeout to prevent deadlock in some browsers
-		setTimeout(function() {
-			// alert(text);
-			var divcoordinate = document.getElementById("coordinate");
-			divcoordinate.innerHTML = text;
-		}, 0);
+	            // Make extrusions slightly opaque for see through indoor walls.
+		            'fill-extrusion-opacity': 1
+		    }
+		}, styleToLabelLayer[app.currentStyle]);
+		map.setLayoutProperty('buildings' + fnum.toString(), 'visibility', 'visible');
+		app.currentGeojsonObjects['buildings' + fnum.toString()] = true;
 	}
-	// listen to the click event on the globe and window
-	google.earth.addEventListener(ge.getWindow(), 'mousemove', eventHandler);
 
 }
 
-function failureCallback(errorCode) {
+function toggleEdifici(file) {
+	map = app.map;
+	var GeojsonCheckbox = document.getElementById('Geojson-bergamo_buildings-check');
+	if (GeojsonCheckbox.checked && !app.currentGeojsonObjects['buildings0']){
+		loadEdifici();
+	}
+	else{
+		for (var fnum = 0; fnum < 6; fnum++) {
+	    	var clickedLayer = 'buildings' + fnum.toString()
+	    	var visibility = map.getLayoutProperty(clickedLayer, "visibility");
+
+		    if (visibility !== 'none') {
+		        map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+		        this.className = '';
+		    } else {
+		        this.className = 'active';
+		        map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+
+		    }
+	    }
+	}
 }
 
 function toggleGeojson(file) {
-
+	if (file.search('buildings') > -1) {
+		toggleEdifici(file);
+		return;
+	}
 	var GeojsonCheckbox = document.getElementById('Geojson-' + file + '-check');
 
 	if (GeojsonCheckbox.checked && !app.currentGeojsonObjects[file])
 		loadGeojson(file);
 	else{
-		toggleLayer(file);
+		toggleLayer(file);	
 	}
+}
+
+function loadGeojson(file) {
+
+	var path = '';
+	if (file.startsWith('buildings')) {
+		path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/bergamo_altri/' + file + '.geojson'
+	}
+	else
+	{
+		path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/' + file + '.geojson'; 
+		flyTo(centers[file.split('_')[0]]);
+	}
+	map = app.map;
+	if (!linkCheck(path)){
+		alert('Work In Progress!\nGoogle ha terminato il supporto alle API di Google Earth, stiamo lavorando per rendere la piattaforma nuovamente funzionante quanto prima.')
+		document.getElementById('Geojson-' + file + '-check').checked = '';
+		return
+	}
+
+	map.addSource(file, {
+    'type': 'geojson',
+    'data': path
+	});
+
+	
+	map.addLayer({
+        'id': file,
+        'type': 'fill-extrusion',
+        'source': file,
+        'paint': {
+            // See the Mapbox Style Spec for details on property functions
+            // https://www.mapbox.com/mapbox-gl-style-spec/#types-function
+            'fill-extrusion-color': {
+                // Get the fill-color from the source 'color' property.
+                'property': 'color',
+                'type': 'identity'
+            },
+            'fill-extrusion-height': {
+                // Get fill-extrude-height from the source 'height' property.
+                'property': 'height',
+                'type': 'identity'
+            },
+            'fill-extrusion-base': {
+                // Get fill-extrude-base from the source 'base_height' property.
+                'property': 'base_height',
+                'type': 'identity'
+            },
+            // Make extrusions slightly opaque for see through indoor walls.
+	            'fill-extrusion-opacity': 1
+	    }
+	}, styleToLabelLayer[app.currentStyle]);
+
+	app.currentGeojsonObjects[file] = true;
 }
 
 function toggleLayer(file){
@@ -257,64 +315,6 @@ function flyTo(coordinates){
     });
 }
 
-
-function loadGeojson(file) {
-
-	var path = '';
-
-	{
-		path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/' + file + '.geojson'; 
-		flyTo(centers[file.split('_')[0]]);
-	}
-	map = app.map;
-	// var path = 'https://unibg-gislab.github.io/datasets/obsoleto_dismesso_3D/' + file + '.geojson'; 
-	if (!linkCheck(path)){
-		alert('Work In Progress!\nGoogle ha terminato il supporto alle API di Google Earth, stiamo lavorando per rendere la piattaforma nuovamente funzionante quanto prima.')
-		document.getElementById('Geojson-' + file + '-check').checked = '';
-		return
-	}
-
-	
-    
-
-	map.addSource(file, {
-    'type': 'geojson',
-    'data': path
-	});
-
-	
-	map.addLayer({
-        'id': file,
-        'type': 'fill-extrusion',
-        'source': file,
-        'paint': {
-            // See the Mapbox Style Spec for details on property functions
-            // https://www.mapbox.com/mapbox-gl-style-spec/#types-function
-            'fill-extrusion-color': {
-                // Get the fill-color from the source 'color' property.
-                'property': 'color',
-                'type': 'identity'
-            },
-            'fill-extrusion-height': {
-                // Get fill-extrude-height from the source 'height' property.
-                'property': 'height',
-                'type': 'identity'
-            },
-            'fill-extrusion-base': {
-                // Get fill-extrude-base from the source 'base_height' property.
-                'property': 'base_height',
-                'type': 'identity'
-            },
-            // Make extrusions slightly opaque for see through indoor walls.
-	            'fill-extrusion-opacity': 1
-	    }
-	}, styleToLabelLayer[app.currentStyle]);
-
-	app.currentGeojsonObjects[file] = true;
-
-}
-
-
 function toggleStrade() {
 	sat = "mapbox://styles/dnlcrl/ciy5oqecp00472sqitnohq0rw"
 
@@ -333,7 +333,10 @@ function addCheckedLayers(){
 			toggleConfini();
 			// addBuildings();
 			for (var file in app.layersToRecover){
-				toggleGeojson(file);
+				if (!file.includes('buildings') || file.includes('0')) {
+					toggleGeojson(file);
+				}
+
 			}
 			app.stylechanged = undefined
 	}

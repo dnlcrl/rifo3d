@@ -27,14 +27,7 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.31.0/mapbox-gl.css' rel='stylesheet' />
-        <style>
-            /*body { margin:0; padding:0; }*/
-            .mapboxgl-canvas { position:relative !important; top:0; bottom:0; width:100%; }
-            .mapboxgl-popup {
-            /*max-width: 400px;*/
-            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            }
-        </style>
+
     </head>
     <body>
         <header style="margin-top: 5px;">
@@ -83,39 +76,7 @@
                 <div>
                     <img src="images/legenda/aree_obsolete.png" style="width: 100px"  /> <img src="images/legenda/aree_dismesse.png" style="width: 100px"  />
                 </div>
-                <STRONG>FONDO MAPPA</STRONG>
-                <div class="uk-width-1-4">
-                    <span class="legenda-title Stile3"> </span>
-                    <div class="earthtoggles">
-                        <div id="menustyle" class="Stile3">
-                            <input type="radio" name="rtoggle" id="default" value="default" checked="checked">
-                            <label for="default" >Ibrido</label>
-                            <input type="radio" name="rtoggle" id="satellite" value="satellite">
-                            <label for="satellite" >Satellite</label>
-                            <input type="radio" name="rtoggle" id="light" value="light">
-                            <label for="light" >Light</label>
-                            <input type="radio" name="rtoggle" id="dark" value="dark">
-                            <label for="dark" >Dark</label>
-                        </div>
-                        <div class="Stile3">
-                            <input type="checkbox" id="confini_comunali-check" onclick="toggleConfini()" checked>
-                            <span class="legenda">Confini Comunali</span>
-                        </div>
- <!--                        <div class="input_check">
-                            <input type="checkbox" id="Geojson-designatori__-check" onclick="toggleGeojson('designatori__')" >
-                        </div> -->
-                        
-
-
-                            <!-- <input type="checkbox" id="Geojson-strade-check" onClick="toggleStrade()">
-                            <span class="legenda">Strade</span> -->
-                        <!-- </div> -->
-                    </div>
-<!--                         <div class="Stile3">
-                        <input type="checkbox" id="Geojson-confini-check" onClick="toggleConfini()">
-                        <span class="legenda">Toponimi</span>
-                    </div> -->
-                </div>
+                
                 <br>
                 
                 <div class="earthtoggles">
@@ -128,6 +89,10 @@
                     <div>
                         <input type="checkbox" id="Geojson-bergamo_dismesso-check" onclick="toggleGeojson('bergamo_dismesso')">
                         <span class="legenda"><a href="javascript:;" onClick="window.open('images/image_dismesso/bergamo_dismesso.html', 'Bergamo Dismesso', 'width=450, height=450, resizable, status, scrollbars=1, location');"> Dismesso</a></span>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="Geojson-bergamo_buildings-check" onclick="toggleEdifici('bergamo')">
+                        <span class="legenda">Altri edifici</span>
                     </div>
                     <STRONG>BRESCIA</STRONG>
                     <div>
@@ -230,6 +195,45 @@
                     </div>
                     <br>
 
+                </div>
+                <!-- <STRONG>FONDO MAPPA</STRONG> -->
+                <div class="uk-width-1-4">
+                    <span class="legenda-title Stile3"> </span>
+                    <div class="earthtoggles">
+                        <div class="Stile3">
+                            <input type="checkbox" id="confini_comunali-check" onclick="toggleConfini()" checked>
+                            <span class="legenda">Confini Comunali</span>
+                        </div>
+                        <div class="Stile3">
+                            <input type="checkbox" id="edifici3d-check" onclick="toggleEdifici()" checked>
+                            <span class="legenda">Edifici 3D</span>
+                        </div>
+                        <div id="menustyle" class="Stile3">
+                            <input type="radio" name="rtoggle" id="satellite" value="satellite">
+                            <label for="satellite" >Satellite</label>
+                            <input type="radio" name="rtoggle" id="hybrid" value="hybrid">
+                            <label for="hybrid" >Ibrido</label>
+                            <input type="radio" name="rtoggle" id="outdoors" value="outdoors" checked="checked">
+                            <label for="outdoors" >Outdoors</label>
+                            <input type="radio" name="rtoggle" id="light" value="light">
+                            <label for="light" >Light</label>
+                            <input type="radio" name="rtoggle" id="dark" value="dark">
+                            <label for="dark" >Dark</label>
+                        </div>
+ <!--                        <div class="input_check">
+                            <input type="checkbox" id="Geojson-designatori__-check" onclick="toggleGeojson('designatori__')" >
+                        </div> -->
+                        
+
+
+                            <!-- <input type="checkbox" id="Geojson-strade-check" onClick="toggleStrade()">
+                            <span class="legenda">Strade</span> -->
+                        <!-- </div> -->
+                    </div>
+<!--                         <div class="Stile3">
+                        <input type="checkbox" id="Geojson-confini-check" onClick="toggleConfini()">
+                        <span class="legenda">Toponimi</span>
+                    </div> -->
                 </div>
             </div>
             <br />

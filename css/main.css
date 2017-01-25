@@ -14,7 +14,12 @@ body {
     background-color: #fff;
 }
 
-
+/*body { margin:0; padding:0; }*/
+.mapboxgl-canvas { position:relative !important; top:0; bottom:0; width:100%; }
+.mapboxgl-popup {
+/*max-width: 400px;*/
+font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
 
 .input_check {
  display:none;
@@ -214,14 +219,15 @@ background-color:#3399CC;
 #map3d #balooncontent {
    max-width: 330px;
 }
+
 div.box{
-  max-width: 400px;
+  max-width: 420px;
   padding-left: 10px;
   padding-right: 10px;
   margin-top: 0px;
   text-align: justify;
   font-size: 13px;
-  width:385px;
+  width:420px;
 }
 
 div.box h3 {

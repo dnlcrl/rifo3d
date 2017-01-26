@@ -46,12 +46,6 @@ centers = {'sondrio': [ 9.878767, 46.169858 ],
 
 
 app.currentGeojsonObjects = { 
-// 'ecomuseo': null,
-//'tin': null,
-//'sic_riserve_plis': null,
-// 'confini_comunali': null,
-// 'designatori__': null
- 
 };
     
 //var ge_strade = false;
@@ -82,15 +76,13 @@ function init() {
 
     app.map = map;
     map.on('mousemove', function (e) {
+	    setTimeout(function() {
+	      // alert(text);
+	      var text = e.lngLat['lat'].toFixedDown(5) + ", " + e.lngLat['lng'].toFixedDown(5);
 
-
-    setTimeout(function() {
-      // alert(text);
-      var text = e.lngLat['lat'].toFixedDown(5) + ", " + e.lngLat['lng'].toFixedDown(5);
-
-      var divcoordinate = document.getElementById("coordinate");
-      divcoordinate.innerHTML = text;
-    }, 10);
+	      var divcoordinate = document.getElementById("coordinate");
+	      divcoordinate.innerHTML = text;
+	    }, 10);
 	});
 
 	// map.addControl(new mapboxgl.AttributionControl(), 'bottom-right');
@@ -118,13 +110,14 @@ function init() {
 	    	}
 	    }
 
+	    console.log(feature.properties.name);
 	    // var feature = features[features.length - 1];
 
 	    // Populate the popup and set its coordinates
 	    // based on the feature found.
 	    app.popup = new mapboxgl.Popup()
 	        .setLngLat(e.lngLat)
-	        .setHTML(feature.properties.description)
+	        .setHTML('<div class="popup-title"><center><h4>' + feature.properties.name+ '</h4></ center></div><div>' + feature.properties.description + '</div>')
 	        .addTo(map);
 	});
 
@@ -139,7 +132,57 @@ function init() {
 	// map.on('load', function() {
 	// 	loadEdifici();
 	// });
+
+	map.on("render", function() {
+	  if(map.loaded()) {
+	    stopspinner();
+	  }
+	});
+
+	map.on("dataloading", function(){
+		startspinner();
+	});
+
+	map.addControl(new mapboxgl.NavigationControl());
+
 	
+}
+
+function startspinner(){
+	if (app.spinner) {return}
+	var opts = {
+	 lines: 13 // The number of lines to draw
+	, length: 28 // The length of each line
+	, width: 14 // The line thickness
+	, radius: 42 // The radius of the inner circle
+	, scale: 0.15 // Scales overall size of the spinner
+	, corners: 1 // Corner roundness (0..1)
+	, color: '#000' // #rgb or #rrggbb or array of colors
+	, opacity: 0.25 // Opacity of the lines
+	, rotate: 0 // The rotation offset
+	, direction: 1 // 1: clockwise, -1: counterclockwise
+	, speed: 1 // Rounds per second
+	, trail: 60 // Afterglow percentage
+	, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+	, zIndex: 2e9 // The z-index (defaults to 2000000000)
+	, className: 'spinner' // The CSS class to assign to the spinner
+	, top: '3vh' // Top position relative to parent
+	, left: '3vh' // Left position relative to parent
+	, shadow: false // Whether to render a shadow
+	, hwaccel: false // Whether to use hardware acceleration
+	, position: 'relative' // Element positioning
+	}
+	var target = document.getElementsByClassName('mapboxgl-ctrl-top-left')[0];
+	var spinner = new Spinner(opts).spin(target);
+	app.spinner = spinner;
+}
+
+function stopspinner(){
+	if (! app.spinner) {return}
+	var parent = document.getElementsByClassName('mapboxgl-ctrl-top-left')[0];
+	var child = document.getElementsByClassName("spinner")[0];
+	parent.removeChild(child);
+	app.spinner = undefined;	
 }
 
 function loadEdifici(){

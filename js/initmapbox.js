@@ -62,7 +62,7 @@ function init() {
 	var map = new mapboxgl.Map({
 		// attributionControl: false,
 	    container: 'map3d', // container id
-	    style: styles['outdoors'], //stylesheet location
+	    style: styles['hybrid'], //stylesheet location
 	    center:  [9.689630, 45.705651], //[9.856441382762, 45.10320555826568], // starting position
 	    zoom: 13, //9 // starting zoom
 	    pitch: 60,
@@ -110,7 +110,6 @@ function init() {
 	    	}
 	    }
 
-	    console.log(feature.properties.name);
 	    // var feature = features[features.length - 1];
 
 	    // Populate the popup and set its coordinates

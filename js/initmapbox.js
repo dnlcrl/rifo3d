@@ -15,7 +15,7 @@ styles = {
 
 styleToLabelLayer = {
 	'hybrid': 'waterway-label',
-	'satellite': undefined,
+	'satellite': 'designatori',
 	'light': 'water',
 	'dark': 'waterway-label',
 	'outdoors': 'poi-outdoor-features',

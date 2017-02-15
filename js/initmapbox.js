@@ -22,9 +22,12 @@ styleToLabelLayer = {
 
 }
 
-app.currentStyle = 'hybrid';
+app.currentStyle = 'satellite';
 app.stylechanged = undefined;
 app.center = [9.95528, 45.64553388];
+document.getElementById(app.currentStyle).checked = "checked";
+
+
 
 Number.prototype.toFixedDown = function(digits) {
     var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
@@ -418,4 +421,10 @@ function switchLayer(layer) {
 for (var i = 0; i < inputs.length; i++) {
     inputs[i].onclick = switchLayer;
 }
+
+
+// var styleList = document.getElementById('menustyle');
+// var inputs = layerList.getElementsByTagName('input');
+
+// checked="checked"
 
